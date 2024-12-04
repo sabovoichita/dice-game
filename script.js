@@ -20,3 +20,11 @@ rulesBtn.addEventListener("click", () => {
   rulesBtn.textContent = isModalShowing ? "Hide rules" : "Show rules";
   rulesContainer.style.display = isModalShowing ? "block" : "none";
 });
+
+rollDiceBtn.addEventListener("click", () => {
+  const randomNum = () => Math.floor(Math.random() * 6 + 1);
+  for (let i = 0; i < 5; i++) {
+    diceValuesArr[i] = randomNum();
+    listOfAllDice[i].textContent = `${diceValuesArr[i]}`;
+  }
+});
