@@ -15,16 +15,44 @@ let rolls = 0;
 let score = 0;
 let round = 1;
 
+const rollDice = () => {
+  diceValuesArr = [];
+
+  for (let i = 0; i < 5; i++) {
+    const randomDice = Math.floor(Math.random() * 6) + 1;
+    diceValuesArr.push(randomDice);
+  }
+
+  listOfAllDice.forEach((dice, index) => {
+    dice.textContent = diceValuesArr[index];
+  });
+};
+
+// The logic for your button click is:
+// 1 . roll the dice
+// 2a. if the number of rolls is equal to three, display an alert
+// 2b. otherwise(else) increment(++) the number of rolls.
+// users are allowed to roll the dice a maximum of three(===3) times
+
+// If a user clicks the rollDiceBtn but has already made three rolls
+// alert() to indicate they must select a score -
+// otherwise, it should roll the dice as it currently does(rollDice())
+// and increment the rolls variable(rolls++)
+
+const rollDiceClicked = rollDiceBtn.addEventListener("click", () => {
+  if (rolls === 3) {
+    alert("Please select a score!");
+    return;
+  } else {
+    rolls++;
+    rollsElement.textContent = rolls;
+    console.log(rolls);
+    rollDice();
+  }
+});
+
 rulesBtn.addEventListener("click", () => {
   isModalShowing = !isModalShowing;
   rulesBtn.textContent = isModalShowing ? "Hide rules" : "Show rules";
   rulesContainer.style.display = isModalShowing ? "block" : "none";
-});
-
-rollDiceBtn.addEventListener("click", () => {
-  const randomNum = () => Math.floor(Math.random() * 6 + 1);
-  for (let i = 0; i < 5; i++) {
-    diceValuesArr[i] = randomNum();
-    listOfAllDice[i].textContent = `${diceValuesArr[i]}`;
-  }
 });
