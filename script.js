@@ -39,6 +39,11 @@ const rollDice = () => {
 // otherwise, it should roll the dice as it currently does(rollDice())
 // and increment the rolls variable(rolls++)
 
+const updateStats = () => {
+  rollsElement.innerHTML = rolls;
+  roundElement.innerHTML = round;
+};
+
 const rollDiceClicked = rollDiceBtn.addEventListener("click", () => {
   if (rolls === 3) {
     alert("Please select a score!");
@@ -48,8 +53,19 @@ const rollDiceClicked = rollDiceBtn.addEventListener("click", () => {
     rollsElement.textContent = rolls;
     console.log(rolls);
     rollDice();
+    updateStats();
   }
 });
+
+// Step 5
+// You'll need to be able to update your rolls
+//  and your round on the page.
+//  Create an updateStats function
+//  to update the text of those two elements
+//  with the appropriate values.
+//  Then, call that function
+//  when your rollDiceBtn is clicked
+//  and the dice are rolled.
 
 rulesBtn.addEventListener("click", () => {
   isModalShowing = !isModalShowing;
