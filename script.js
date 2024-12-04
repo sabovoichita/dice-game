@@ -124,6 +124,26 @@ const getHighestDuplicates = (diceValuesArr) => {
   }
 };
 
+// Step 8
+// Before each dice roll,
+//  you will need to reset the values for the score inputs and spans
+//  so a new value can be displayed.
+// Create a resetRadioOptions function.
+// Your function should iterate through the scoreInputs
+// to disable them and remove the checked attribute.
+// Your function should also remove the text from each of the scoreSpans.
+// Finally, call this function before you roll the dice.
+
+const resetRadioOptions = () => {
+  scoreInputs.forEach((input) => {
+    input.disabled = true;
+    input.checked = false;
+  });
+  scoreSpans.forEach((span) => {
+    span.textContent = "";
+  });
+};
+
 rollDiceBtn.addEventListener("click", () => {
   if (rolls === 3) {
     alert("Please select a score!");
@@ -132,6 +152,7 @@ rollDiceBtn.addEventListener("click", () => {
     rolls++;
     // rollsElement.textContent = rolls;
     // console.log(rolls);
+    resetRadioOptions();
     rollDice();
     getHighestDuplicates(diceValuesArr);
     updateStats();
