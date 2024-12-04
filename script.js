@@ -45,16 +45,17 @@ const updateStats = () => {
 };
 
 const updateRadioOption = (index, score) => {
-  // set the scoreInputs at that index to be enabled
-  scoreInputs[index].disabled = false;
-
-  // set the value of that input to the score,
-  scoreInputs[index].value = score;
-
-  //  and display , score = ${score} in the correct scoreSpans element.
-  scoreSpans[index].innerHTML = `, score = ${score}`;
+  if (scoreInputs[index]) {
+    // Enable the input
+    scoreInputs[index].disabled = false;
+    // Set the value of the input
+    scoreInputs[index].value = score;
+    // Update the corresponding score span
+    scoreSpans[index].textContent = `, score = ${score}`;
+  } else {
+    console.error(`Invalid index: ${index}`);
+  }
 };
-console.log(updateRadioOption());
 
 // Step 6
 // Each time you roll the dice,
@@ -73,15 +74,66 @@ console.log(updateRadioOption());
 // set the value of that input to the score,
 //  and display , score = ${score} in the correct scoreSpans element.
 
-const rollDiceClicked = rollDiceBtn.addEventListener("click", () => {
+// Step 7
+// If you roll the dice(roll) and (&&)
+// get a Three of a kind (||) Four of a kind,
+//  then you can get a score totalling the sum of all five dice values
+// totalScore = diceValuesArr sum
+// . To calculate this,
+//  create a getHighestDuplicates function
+//  which takes an array of numbers.
+//   The function will need to count
+//   how many times each number is found in the array.
+// count var
+// If a number appears four or more times,
+// if (count > 4 and count >5)
+// you will need to update the Four of a Kind option
+// scoreInputs[index] = "three-of-a-kind";
+// with your updateRadioOption function.
+//  If a number appears three or more times,
+//  else of (count >=3)
+//  you will need to update the Three of a Kind option.
+//   In both cases,
+//    the score value should be the sum of all five dice.
+// score.value1+val2+...
+// Regardless of the outcome,
+// the final option should be updated with a score of 0.
+// Make sure to call your getHighestDuplicates
+//  when the dice are rolled.
+
+const getHighestDuplicates = (diceValuesArr) => {
+  const counts = {};
+  let totalScore = diceValuesArr.reduce((sum, val) => sum + val, 0);
+  // Count occurrences of each number
+  diceValuesArr.forEach((number) => {
+    counts[number] = (counts[number] || 0) + 1;
+  });
+  // Find the highest duplicate count
+  const maxCount = Math.max(...Object.values(counts));
+  if (maxCount >= 4) {
+    // Update Four of a Kind option (index 1 for "four-of-a-kind")
+    updateRadioOption(1, totalScore);
+    // Also update Three of a Kind option (index 0 for "three-of-a-kind")
+    updateRadioOption(0, totalScore);
+  } else if (maxCount >= 3) {
+    // Update Three of a Kind option (index 0 for "three-of-a-kind")
+    updateRadioOption(0, totalScore);
+  } else {
+    // Update "None of the above" option (index 5 for "none")
+    updateRadioOption(5, 0);
+  }
+};
+
+rollDiceBtn.addEventListener("click", () => {
   if (rolls === 3) {
     alert("Please select a score!");
     return;
   } else {
     rolls++;
-    rollsElement.textContent = rolls;
-    console.log(rolls);
+    // rollsElement.textContent = rolls;
+    // console.log(rolls);
     rollDice();
+    getHighestDuplicates(diceValuesArr);
     updateStats();
   }
 });
