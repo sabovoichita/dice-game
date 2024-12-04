@@ -74,6 +74,33 @@ const updateRadioOption = (index, score) => {
 // set the value of that input to the score,
 //  and display , score = ${score} in the correct scoreSpans element.
 
+// Step 9
+// When you roll the dice and make a selection,
+// you are not able to keep the score you selected
+// and move onto the next round.
+// Create an updateScore function to add this functionality.
+// Your function will need two parameters for the user selected score option
+// The first parameter will be passed the value of the radio button,
+// remember this is a string===parseInt(value)
+// and the second parameter will be passed the id value of the radio button,
+// which is the type of score they achieved.
+// The function will need to add the user selected value to the score,
+// update the total score text on the page,
+// and add a new li element to the score history ul element,
+// using the format ${achieved} : ${selectedValue} for
+// the li element content.
+
+const updateScore = (value, id) => {
+  console.log(value);
+  console.log(id);
+  console.log(parseInt(value));
+  const scoreVal = parseInt(value);
+  score += scoreVal;
+  totalScoreElement.innerText = score;
+  scoreHistory.innerHTML = `<li>${id} : ${value}</li>`;
+};
+console.log(updateScore(10, "hi"));
+
 // Step 7
 // If you roll the dice(roll) and (&&)
 // get a Three of a kind (||) Four of a kind,
