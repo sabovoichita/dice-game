@@ -91,15 +91,15 @@ const updateRadioOption = (index, score) => {
 // the li element content.
 
 const updateScore = (value, id) => {
-  console.log(value);
-  console.log(id);
-  console.log(parseInt(value));
+  //   console.log(value);
+  //   console.log(id);
+  //   console.log(parseInt(value));
   const scoreVal = parseInt(value);
   score += scoreVal;
   totalScoreElement.innerText = score;
   scoreHistory.innerHTML = `<li>${id} : ${value}</li>`;
 };
-console.log(updateScore(10, "hi"));
+// console.log(updateScore(10, "hi"));
 
 // Step 7
 // If you roll the dice(roll) and (&&)
@@ -201,3 +201,94 @@ rulesBtn.addEventListener("click", () => {
   rulesBtn.textContent = isModalShowing ? "Hide rules" : "Show rules";
   rulesContainer.style.display = isModalShowing ? "block" : "none";
 });
+
+// Step 10
+// After a user makes a selection,
+//  they should be able to keep that score and move onto the next round
+//  by clicking the keepScoreBtn.
+//
+// When that button is clicked,
+// you should find which radio option is checked
+//  and capture its value
+//  and id attributes.
+//   If the user has selected an option,
+//   call your functions to update the score,
+//   reset the radio options,
+//   and add the value
+//   and id to the score history.
+
+// If the user has not selected an option,
+// display an alert informing them to do so.
+
+// keepScoreBtn.addEventListener("click", () => {
+//   // Clear the score history for this round
+//   scoreHistory.innerHTML = "";
+
+//   let isOptionSelected = false;
+
+//   // Iterate over radio inputs to check if any is selected
+//   scoreInputs.forEach((input) => {
+//     if (input.checked) {
+//       isOptionSelected = true;
+
+//       // Capture the selected ID and value
+//       const selectedId = input.attributes.id.value;
+//       const selectedValue = parseInt(input.value, 10); // Convert value to number
+
+//       // Update the total score
+//       score += selectedValue;
+//       totalScoreElement.innerHTML = `Total Score: ${score}`;
+
+//       // Append to the score history
+//       const scoreEntry = document.createElement("div");
+//       scoreEntry.textContent = `Round ${round}: Selected Score - ${selectedValue}, Option - ${selectedId}`;
+//       scoreHistory.appendChild(scoreEntry);
+
+//       // Reset radio options and move to the next round
+//       resetRadioOptions();
+//       round++;
+//       updateStats(); // Update round and roll stats on the page
+//     }
+//   });
+
+//   // Alert if no option was selected
+//   if (!isOptionSelected) {
+//     alert("Please choose an option to keep your score.");
+//   }
+// });
+
+// version2;
+keepScoreBtn.addEventListener("click", () => {
+  // Purpose: Adds an event listener to the keepScoreBtn button.
+  // Action: When the button is clicked, the callback function is executed.
+  for (let i = 0; i < scoreInputs.length; i++) {
+    // Purpose: Iterates over all the radio buttons (scoreInputs) to check which one is selected.
+    // Key Idea: The for loop cycles through each element in the scoreInputs list.
+    if (scoreInputs[i].checked) {
+      // Purpose: Checks if the current radio button (scoreInputs[i]) is selected (checked is true).
+      // Key Idea: Only one radio button can be selected at a time because they are grouped by the same name.
+      updateScore(scoreInputs[i].value, scoreInputs[i].id);
+      // Purpose: If a radio button is selected:
+      // Its value (representing the score) and id (describing the scoring category) are passed to the updateScore function.
+      // updateScore likely:
+      // Adds the score to the total.
+      // Updates the score display.
+      // Logs the action in a history or summary.
+      // Key Idea: Processes the user’s selected score.
+      resetRadioOptions();
+      // Purpose: Resets all the radio buttons and related spans to their initial state (disabled and unchecked).
+      // Key Idea: Prepares the inputs for the next round after the user makes a selection.
+      break;
+      // Purpose: Ends the loop after finding a checked radio button.
+      // Key Idea: Prevents unnecessary iterations once the selection is found.
+    } else if (i === scoreInputs.length - 1) {
+      alert("Please select an option");
+    }
+  }
+});
+// Purpose:
+// else if ensures this block is executed only when no radio button is selected.
+// i === scoreInputs.length - 1:
+// This checks if the loop has reached the last radio button.
+// If none were selected by this point, the user is alerted.
+// Key Idea: Ensures the user makes a selection before proceeding.
