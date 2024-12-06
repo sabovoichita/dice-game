@@ -172,6 +172,34 @@ const resetRadioOptions = () => {
   });
 };
 
+// 12.
+// If you go through six rounds of the game,
+// you should see the alert show up with your final score.
+// But when you dismiss the alert,
+// you are able to keep playing for more rounds past the original six.
+//  To fix this, you will need to reset the game.
+// Declare a resetGame function to do so.
+// Reset all of the listOfAllDice elements to display 0,
+//  update score and rolls to be 0,
+// update round to be 1,
+// set the totalScoreElement text to the user's total score,
+//  clear the score history by setting it to an empty string,
+//  set the rollsElement text to the number of rolls,
+//  and set the roundElement text to the current round.
+//  Finally, reset all of the radio buttons to their initial states.
+// Call this function after displaying the alert with the final score.
+const resetGame = () => {
+  listOfAllDice.forEach((list) => (list.innerText = 0));
+  round = 1;
+  rolls = 0;
+  score = 0;
+  totalScoreElement.innerText = score;
+  scoreHistory.innerHTML = "";
+  rollsElement.textContent = rolls;
+  roundElement.textContent = round;
+  resetRadioOptions();
+};
+
 rollDiceBtn.addEventListener("click", () => {
   if (rolls === 3) {
     alert("Please select a score!");
