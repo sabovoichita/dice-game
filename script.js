@@ -135,6 +135,7 @@ const getHighestDuplicates = (diceValuesArr) => {
   diceValuesArr.forEach((number) => {
     counts[number] = (counts[number] || 0) + 1;
   });
+
   // Find the highest duplicate count
   const maxCount = Math.max(...Object.values(counts));
   if (maxCount >= 4) {
@@ -181,8 +182,15 @@ rollDiceBtn.addEventListener("click", () => {
     // console.log(rolls);
     resetRadioOptions();
     rollDice();
-    getHighestDuplicates(diceValuesArr);
     updateStats();
+    getHighestDuplicates(diceValuesArr);
+
+    if (round >= 6) {
+      setTimeout(() => {
+        alert(`Game Over! Your final score is: ${score}`);
+        console.log(`Final score: ${score}`);
+      }, 500);
+    }
   }
 });
 
@@ -278,6 +286,9 @@ keepScoreBtn.addEventListener("click", () => {
       resetRadioOptions();
       // Purpose: Resets all the radio buttons and related spans to their initial state (disabled and unchecked).
       // Key Idea: Prepares the inputs for the next round after the user makes a selection.
+      rolls = 0;
+      round++;
+      updateStats();
       break;
       // Purpose: Ends the loop after finding a checked radio button.
       // Key Idea: Prevents unnecessary iterations once the selection is found.
