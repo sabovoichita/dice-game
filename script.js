@@ -97,7 +97,7 @@ const updateScore = (value, id) => {
   const scoreVal = parseInt(value);
   score += scoreVal;
   totalScoreElement.innerText = score;
-  scoreHistory.innerHTML = `<li>${id} : ${value}</li>`;
+  scoreHistory.innerHTML += `<li>${id} : ${value}</li>`;
 };
 // console.log(updateScore(10, "hi"));
 
@@ -148,6 +148,39 @@ const getHighestDuplicates = (diceValuesArr) => {
     updateRadioOption(0, totalScore);
   } else {
     // Update "None of the above" option (index 5 for "none")
+    updateRadioOption(5, 0);
+  }
+};
+
+// Step 13
+// If the user rolls three of one number,
+// and two of another number, this is called a full house.
+//  Declare a detectFullHouse function that accepts a single argument.
+//   The function will be passed the diceValuesArr array when called.
+// Your detectFullHouse function should check
+// if the user has rolled three of one number and two of another number.
+//  If so, it should update the third radio button to display a score of 25,
+//   with the correct attributes.
+// Regardless,
+// it should always update the last radio button to display a score of 0,
+//  with the correct attributes.
+// Don't forget to call your new function when the dice are rolled.
+
+const detectFullHouse = (arr) => {
+  const counts = {};
+  // Count occurrences of each number
+  arr.forEach((number) => {
+    counts[number] = (counts[number] || 0) + 1;
+  });
+  //   console.log(arr);
+  const maxCount = Math.max(...Object.values(counts));
+  const minCount = Math.min(...Object.values(counts));
+  //   console.log(maxCount === 3);
+  //   console.log(minCount === 2);
+  if (minCount === 2 && maxCount === 3) {
+    // score = 25;
+    updateRadioOption(2, 25);
+  } else {
     updateRadioOption(5, 0);
   }
 };
@@ -212,13 +245,7 @@ rollDiceBtn.addEventListener("click", () => {
     rollDice();
     updateStats();
     getHighestDuplicates(diceValuesArr);
-
-    if (round >= 6) {
-      setTimeout(() => {
-        alert(`Game Over! Your final score is: ${score}`);
-        console.log(`Final score: ${score}`);
-      }, 500);
-    }
+    detectFullHouse(diceValuesArr);
   }
 });
 
@@ -295,14 +322,28 @@ rulesBtn.addEventListener("click", () => {
 
 // version2;
 keepScoreBtn.addEventListener("click", () => {
+  if (round >= 6) {
+    setTimeout(() => {
+      alert(`Game Over! Your final score is: ${score}`);
+      //   console.log(`Final score: ${score}`);
+      resetGame();
+    }, 500);
+  }
   // Purpose: Adds an event listener to the keepScoreBtn button.
   // Action: When the button is clicked, the callback function is executed.
   for (let i = 0; i < scoreInputs.length; i++) {
     // Purpose: Iterates over all the radio buttons (scoreInputs) to check which one is selected.
     // Key Idea: The for loop cycles through each element in the scoreInputs list.
     if (scoreInputs[i].checked) {
+      rolls = 0;
+      round++;
       // Purpose: Checks if the current radio button (scoreInputs[i]) is selected (checked is true).
       // Key Idea: Only one radio button can be selected at a time because they are grouped by the same name.
+      updateStats();
+      resetRadioOptions();
+      // Purpose: Resets all the radio buttons and related spans to their initial state (disabled and unchecked).
+      // Key Idea: Prepares the inputs for the next round after the user makes a selection.
+
       updateScore(scoreInputs[i].value, scoreInputs[i].id);
       // Purpose: If a radio button is selected:
       // Its value (representing the score) and id (describing the scoring category) are passed to the updateScore function.
@@ -311,12 +352,7 @@ keepScoreBtn.addEventListener("click", () => {
       // Updates the score display.
       // Logs the action in a history or summary.
       // Key Idea: Processes the user’s selected score.
-      resetRadioOptions();
-      // Purpose: Resets all the radio buttons and related spans to their initial state (disabled and unchecked).
-      // Key Idea: Prepares the inputs for the next round after the user makes a selection.
-      rolls = 0;
-      round++;
-      updateStats();
+
       break;
       // Purpose: Ends the loop after finding a checked radio button.
       // Key Idea: Prevents unnecessary iterations once the selection is found.
