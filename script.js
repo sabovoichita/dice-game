@@ -233,6 +233,73 @@ const resetGame = () => {
   resetRadioOptions();
 };
 
+//Step 14
+//For the last portion of the game,
+//you will need to create an algorithm that checks for the presence
+//of a straight.
+//A small straight is when four of the dice have consecutive values
+//in any order (Ex. in a roll of 41423, we have 1234) resulting in a
+//score of 30 points.
+//A large straight is when all five dice have consecutive values
+//in any order (Ex. in a roll of 35124, we have 12345)
+//resulting in a score of 40 points.
+
+//Declare a checkForStraights function which accepts an array of numbers.
+//If the user gets a large straight,
+//update the fifth radio button with a score of 40.
+//If the user gets a small straight,
+//update the fourth radio button with a score of 30.
+//If the user gets no straight,
+//update the last radio button to display 0.
+const checkForStraights = (arr) => {
+  const sorted = [...new Set(arr)].sort((a, b) => a - b);
+
+  // Flags to track detection
+  let hasSmallStraight = false;
+  let hasLargeStraight = false;
+
+  // Check for large straight (5 consecutive numbers)
+  if (
+    sorted.length === 5 &&
+    sorted[0] + 1 === sorted[1] &&
+    sorted[1] + 1 === sorted[2] &&
+    sorted[2] + 1 === sorted[3] &&
+    sorted[3] + 1 === sorted[4]
+  ) {
+    hasLargeStraight = true;
+    updateRadioOption(4, 40); // Large straight radio button
+    scoreSpans[4].textContent = ", score = 40";
+    // Large straight also qualifies as a small straight
+    updateRadioOption(3, 30); // Small straight radio button
+    scoreSpans[3].textContent = ", score = 30";
+  }
+
+  // Check for small straight (4 consecutive numbers)
+  if (!hasLargeStraight) {
+    for (let i = 0; i <= sorted.length - 4; i++) {
+      if (
+        sorted[i] + 1 === sorted[i + 1] &&
+        sorted[i + 1] + 1 === sorted[i + 2] &&
+        sorted[i + 2] + 1 === sorted[i + 3]
+      ) {
+        hasSmallStraight = true;
+        updateRadioOption(3, 30); // Small straight radio button
+        scoreSpans[3].textContent = ", score = 30";
+        break;
+      }
+    }
+  }
+
+  // No straight found
+  if (!hasSmallStraight && !hasLargeStraight) {
+    updateRadioOption(5, 0); // "Chance" radio button
+    scoreSpans[5].textContent = ", score = 0";
+  }
+};
+
+console.log(checkForStraights([4, 2, 3, 1, 5]));
+
+// Call your checkForStraights function when the rollDiceBtn is clicked to complete your dice game!
 rollDiceBtn.addEventListener("click", () => {
   if (rolls === 3) {
     alert("Please select a score!");
@@ -246,6 +313,7 @@ rollDiceBtn.addEventListener("click", () => {
     updateStats();
     getHighestDuplicates(diceValuesArr);
     detectFullHouse(diceValuesArr);
+    checkForStraights(diceValuesArr);
   }
 });
 
